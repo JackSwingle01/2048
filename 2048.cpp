@@ -2,91 +2,228 @@
 #include <vector>
 using namespace std;
 
-void moveRight(int grid[4][4]) 
+void printGrid(int grid[4][4])
 {
-    for(int n = 0; n < 4; n++){
-        for (int i = 0; i < 4; i++){
-            for (int j = 2; j >= 0; j--){
-                if (grid[i][j] != 0 && grid[i][j + 1] == 0) //check if empty space is to the right
-                {
-                    grid[i][j + 1] = grid[i][j];
-                    grid[i][j] = 0;   
-                }
-            }
-        }
-    } //moves all blocks to the right
-    
-    for (int i = 0; i < 4; i++){
-        for (int j = 2; j >= 0; j--){
-            if (grid[i][j + 1] == grid[i][j]) 
-            {
-                grid[i][j + 1] = grid[i][j] * 2;
-                grid[i][j] = 0;              
-            }
-        }
-    }
-}
-
-void moveLeft(int grid[4][4])
-{
-
-}
-
-void moveUp(int grid[4][4])
-{
-
-}
-
-void moveDown(int grid[4][4])
-{
-
-}
-
-void readStartState(int grid[4][4])
-{
-    for (int i = 0; i < 4; i++){
-        for (int j = 0; j < 4; j++){
-            cin >> grid[i][j];
-        }
-    } //get input
-}
-
-void printGrid(int grid[4][4]){
-    for (int i = 0; i < 4; i++){
+    for (int i = 0; i < 4; i++)
+    {
         cout << "\n";
-        for (int j = 0; j < 4; j++){
+        for (int j = 0; j < 4; j++)
+        {
             cout << grid[i][j];
             cout << " ";
         }
     }
 }
 
-int main(void)
+void moveRight(int grid[4][4])
 {
-    int direction;
-    int grid[4][4];
-
-    readStartState(grid); //read start grid
-    cin >> direction; //read direction
-
-    if (direction == 0) //left
-    { 
-
-    }
-    else if (direction == 1)//up
+    for (int n = 0; n < 3; n++)
     {
-     //test  
-    }
-    else if (direction == 2)//right
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 2; j >= 0; j--)
+            {
+                if (grid[i][j] != 0 && grid[i][j + 1] == 0) // check if empty space is to the right
+                {
+                    grid[i][j + 1] = grid[i][j];
+                    grid[i][j] = 0;
+                }
+            }
+        }
+    } // initial shift
+
+    for (int i = 0; i < 4; i++)
     {
-        moveRight(grid);
-    }
-    else if (direction == 3)//down
+        for (int j = 2; j >= 0; j--)
+        {
+            if (grid[i][j + 1] == grid[i][j])
+            {
+                grid[i][j + 1] += grid[i][j];
+                grid[i][j] = 0;
+            }
+        }
+    } // merge
+
+    for (int i = 0; i < 4; i++)
     {
-
-    }
-
-    printGrid(grid);//print output
-
+        for (int j = 2; j >= 0; j--)
+        {
+            if (grid[i][j] != 0 && grid[i][j + 1] == 0) // check if empty space is to the right
+            {
+                grid[i][j + 1] = grid[i][j];
+                grid[i][j] = 0;
+            }
+        }
+    } // final shift
 }
 
+void moveLeft(int grid[4][4])
+{
+    for (int n = 0; n < 3; n++)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 1; j < 4; j++)
+            {
+                if (grid[i][j] != 0 && grid[i][j - 1] == 0)
+                {
+                    grid[i][j - 1] = grid[i][j];
+                    grid[i][j] = 0;
+                }
+            }
+        }
+    } // initial shift
+
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 1; j < 4; j++)
+        {
+            if (grid[i][j - 1] == grid[i][j])
+            {
+                grid[i][j - 1] += grid[i][j];
+                grid[i][j] = 0;
+            }
+        }
+    } // merge
+
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 1; j < 4; j++)
+        {
+            if (grid[i][j] != 0 && grid[i][j - 1] == 0)
+            {
+                grid[i][j - 1] = grid[i][j];
+                grid[i][j] = 0;
+            }
+        }
+    } // final shift
+}
+
+void moveUp(int grid[4][4])
+{
+    for (int n = 0; n < 3; n++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            for (int i = 1; i < 4; i++)
+            {
+                if (grid[i][j] != 0 && grid[i - 1][j] == 0)
+                {
+                    grid[i - 1][j] = grid[i][j];
+                    grid[i][j] = 0;
+                }
+            }
+        }
+    } // initial shift into empty spaces
+
+    for (int j = 0; j < 4; j++)
+    {
+        for (int i = 1; i < 4; i++)
+        {
+            if (grid[i - 1][j] == grid[i][j])
+            {
+                grid[i - 1][j] += grid[i][j];
+                grid[i][j] = 0;
+            }
+        }
+    } // merge equal numbers
+
+    for (int j = 0; j < 4; j++)
+    {
+        for (int i = 1; i < 4; i++)
+        {
+            if (grid[i][j] != 0 && grid[i - 1][j] == 0)
+            {
+                grid[i - 1][j] = grid[i][j];
+                grid[i][j] = 0;
+            }
+        }
+    }
+    // final shift into empty spaces
+}
+
+void moveDown(int grid[4][4])
+{
+    for (int n = 0; n < 3; n++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            for (int i = 2; i >= 0; i--)
+            {
+                if (grid[i][j] != 0 && grid[i + 1][j] == 0)
+                {
+                    grid[i + 1][j] = grid[i][j];
+                    grid[i][j] = 0;
+                }
+            }
+        }
+    } // initial shift into empty spaces
+
+    for (int j = 0; j < 4; j++)
+    {
+        for (int i = 2; i >= 0; i--)
+        {
+            if (grid[i + 1][j] == grid[i][j])
+            {
+                grid[i + 1][j] += grid[i][j];
+                grid[i][j] = 0;
+            }
+        }
+    } // merge equal numbers
+
+    for (int j = 0; j < 4; j++)
+    {
+        for (int i = 2; i >= 0; i--)
+        {
+            if (grid[i][j] != 0 && grid[i + 1][j] == 0)
+            {
+                grid[i + 1][j] = grid[i][j];
+                grid[i][j] = 0;
+            }
+        }
+    }
+    // final shift into empty spaces
+}
+
+void readStartState(int grid[4][4])
+{
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            cin >> grid[i][j];
+        }
+    } // get input
+}
+
+int main(void)
+{
+    char direction = ' ';
+    int grid[4][4];
+
+    readStartState(grid); // read start grid
+
+    while (direction != 'q')
+    {
+        cin >> direction; // read direction
+
+        if (direction == 'a') // left
+        {
+            moveLeft(grid);
+        }
+        else if (direction == 'w') // up
+        {
+            moveUp(grid);
+        }
+        else if (direction == 'd') // right
+        {
+            moveRight(grid);
+        }
+        else if (direction == 's') // down
+        {
+            moveDown(grid);
+        }
+
+        printGrid(grid); // print output
+    }
+}
