@@ -200,6 +200,9 @@ int main(void)
 {
     char direction = ' ';
     int grid[4][4];
+    int x,y;
+
+    srand(time(0)); //seed random number function
 
     readStartState(grid); // read start grid
 
@@ -222,6 +225,13 @@ int main(void)
         else if (direction == 's') // down
         {
             moveDown(grid);
+        }
+
+        x = rand() % 4;
+        y = rand() % 4;
+        if (grid[y][x] == 0) 
+        {
+            grid[y][x] = ((rand() % 2) + 1) * 2; 
         }
 
         printGrid(grid); // print output
